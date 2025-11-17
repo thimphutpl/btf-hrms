@@ -28,10 +28,10 @@ class TravelClaim(Document):
         self.get_advance()
         self.calculate_amount()
         self.notify_user_role()
-        # validate_workflow_states(self)
+        validate_workflow_states(self)
 
     def on_submit(self):
-        # notify_workflow_states(self)
+        notify_workflow_states(self)
         self.notify_user_role()
         self.post_journal_entry()
 

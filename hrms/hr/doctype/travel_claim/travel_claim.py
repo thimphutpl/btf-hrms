@@ -27,10 +27,12 @@ class TravelClaim(Document):
     def validate(self):
         self.get_advance()
         self.calculate_amount()
-        validate_workflow_states(self)
+        self.notify_user_role()
+        # validate_workflow_states(self)
 
     def on_submit(self):
-        notify_workflow_states(self)
+        # notify_workflow_states(self)
+        self.notify_user_role()
         self.post_journal_entry()
 
     def before_cancel(self):
@@ -43,7 +45,7 @@ class TravelClaim(Document):
                 )
 
     def on_cancel(self):
-        notify_workflow_states(self)
+        # notify_workflow_states(self)
         if self.journal_entry:
             frappe.delete_doc(
                 "Journal Entry", self.journal_entry, force=1, ignore_permissions=True
@@ -53,6 +55,70 @@ class TravelClaim(Document):
             frappe.msgprint(
                 _("Journal Entry {0} has been deleted.").format(self.journal_entry)
             )
+    def notify_user_role(self):
+        """Send notification based on Travel Claim workflow state using template from HR Settings."""
+        try:
+            wf_state = self.workflow_state
+            recipients = []
+
+            # Determine role based on workflow state
+            role = None
+            if wf_state == "Waiting for Verification":
+                role = "HR User"
+            elif wf_state == "Waiting for Finance Verification":
+                role = "Accounts User"
+            elif wf_state == "Waiting Recommendation":
+                role = "Accounts Manager"
+            elif wf_state == "Waiting Approval":
+                role = "Approver"
+            elif wf_state in ("Approved", "Rejected", "Cancelled"):
+                role = None  # Notify the employee
+
+            # Get email addresses for users with the role
+            if role:
+                users_with_role = frappe.get_all("Has Role", filters={"role": role}, pluck="parent")
+                for user in users_with_role:
+                    email = frappe.db.get_value("User", user, "email")
+                    if email:
+                        recipients.append(email)
+            else:
+                # Notify employee
+                if self.employee:
+                    email = frappe.db.get_value("Employee", self.employee, "user_id")
+                    if email:
+                        recipients.append(email)
+
+            if not recipients:
+                frappe.msgprint(_("No valid recipients found for workflow state {0}").format(wf_state))
+                return
+
+            # Get template from HR Settings
+            template = frappe.db.get_single_value(
+                "HR Settings", "travel_claim_status_notification_template"
+            )
+            if not template:
+                frappe.msgprint(_("Please set the Travel Claim Notification Template in HR Settings."))
+                return
+
+            # Render template
+            message = frappe.render_template(template, {"doc": self})
+            subject = f"Travel Claim {self.name} - {wf_state}"
+
+            # Send emails
+            for email in recipients:
+                frappe.sendmail(
+                    recipients=email,
+                    subject=subject,
+                    message=message,
+                    reference_doctype=self.doctype,
+                    reference_name=self.name,
+                )
+
+            frappe.msgprint(_("Notification sent successfully to: {0}").format(", ".join(recipients)))
+
+        except Exception as e:
+            frappe.log_error(frappe.get_traceback(), "TravelClaim.notify_user_role Error")
+            frappe.throw(_("Notification sending failed: {0}").format(str(e)))
 
     def calculate_amount(self):
         total, advance_amount = 0.0, 0.0
@@ -271,6 +337,9 @@ def get_travel_claim(dt, dn):
     tc.mode_of_travel = doc.mode_of_travel
     tc.branch = doc.branch
     tc.cost_center = doc.cost_center
+    tc.approver=doc.approver
+    tc.approver_name=doc.approver_name
+    tc.approver_designation=doc.approver_designation
 
     for d in doc.get("items"):
         item = d.as_dict()
@@ -311,6 +380,8 @@ def get_travel_claim(dt, dn):
     return tc.as_dict()
 
 
+
+
 def get_permission_query_conditions(user=None):
     
     if not user:
@@ -333,7 +404,7 @@ def get_permission_query_conditions(user=None):
 			)
 			OR
 			(`tabTravel Claim`.approver = '{user}'
-			 AND `tabTravel Claim`.workflow_state NOT IN ('Draft', 'Rejected', 'Cancelled', 'Waiting for Verification'))
+			 AND `tabTravel Claim`.workflow_state NOT IN ('Draft', 'Rejected', 'Cancelled', 'Waiting for Verification','Waiting for Finance Verification','Waiting Recommendation'))
 	""" 
     
     # if "Verifier" in user_roles:

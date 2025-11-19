@@ -83,6 +83,18 @@
   "concept_note",
   "concept_note_rejection",
   "user_creation",
+  "travel_authorization_settings_section",
+  "travel_authorization_approval_notification_template",
+  "column_break_webf",
+  "travel_authorization_status_notification_template",
+  "leave_application_settings_section",
+  "leave_application_approval_notification_template",
+  "column_break_zywj",
+  "leave_application_status_notification_template",
+  "travel_claim_settings_section",
+  "travel_claim_approval_notification_template",
+  "column_break_kygu",
+  "travel_claim_status_notification_template",
   "attendance_tab",
   "office_gobal_ip",
   "office_local_start_ip",
@@ -561,13 +573,79 @@
    "fieldtype": "Link",
    "label": "Hr Approver",
    "options": "Employee"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "leave_application_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Application Settings"
+  },
+  {
+   "fieldname": "leave_application_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Leave Application Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_zywj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "leave_application_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Leave Application Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "travel_claim_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Travel Claim Settings"
+  },
+  {
+   "fieldname": "travel_claim_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Claim Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_kygu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "travel_claim_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Claim Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "travel_authorization_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Travel Authorization Settings"
+  },
+  {
+   "fieldname": "travel_authorization_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Authorization Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_webf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "travel_authorization_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Authorization Status Notification Template",
+   "options": "Email Template"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-28 11:30:20.634641",
+ "modified": "2025-11-07 10:20:44.928588",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

@@ -64,6 +64,7 @@ class PayrollEntry(Document):
 
 	def on_submit(self):
 		self.set_status(update=True, status="Submitted")
+		
 		self.create_salary_slips()
 
 	def validate_existing_salary_slips(self):
@@ -889,52 +890,55 @@ class PayrollEntry(Document):
 
 			# #Remittance
 			if salary_detail.is_remittable and salary_detail.parentfield == "deductions":
-				remittance_amount = 0.0
-				remittance_gl_list = [salary_detail.gl_head, default_employer_pf_account] if salary_detail.salary_component == salary_component_pf else [salary_detail.gl_head]
-				
-				for rem in remittance_gl_list:
-					if rem == default_employer_pf_account:
-						
-						for d in self.get_cc_wise_entries(salary_component_pf):
+				if salary_detail.salary_component != 'Interest Free Loan' and salary_detail.salary_component != 'Salary Advance Deduction':
+				# Commit current transaction
+					frappe.msgprint(str(salary_detail.salary_component))
+					remittance_amount = 0.0
+					remittance_gl_list = [salary_detail.gl_head, default_employer_pf_account] if salary_detail.salary_component == salary_component_pf else [salary_detail.gl_head]
+					
+					for rem in remittance_gl_list:
+						if rem == default_employer_pf_account:
 							
-							remittance_amount += flt(d.amount)
+							for d in self.get_cc_wise_entries(salary_component_pf):
+								
+								remittance_amount += flt(d.amount)
+								posting.setdefault(salary_detail.salary_component, []).append({
+									"account"					: rem,
+									"debit_in_account_currency" : flt(d.amount),
+									"cost_center"   			: d.cost_center,
+									"party_check"   			: 0,
+									"account_type"				: d.account_type if d.party_type == "Employee" else "",
+									"party_type"				: d.party_type if d.party_type == "Employee" else "",
+									"party"						: d.party if d.party_type == "Employee" else "",
+									"reference_type"			: self.doctype,
+									"reference_name"			: self.name,
+									"salary_component"			: salary_detail.salary_component
+								})
+						else:
+							
+							remittance_amount += flt(salary_detail.amount)
 							posting.setdefault(salary_detail.salary_component, []).append({
-								"account"					: rem,
-								"debit_in_account_currency" : flt(d.amount),
-								"cost_center"   			: d.cost_center,
-								"party_check"   			: 0,
-								"account_type"				: d.account_type if d.party_type == "Employee" else "",
-								"party_type"				: d.party_type if d.party_type == "Employee" else "",
-								"party"						: d.party if d.party_type == "Employee" else "",
+								"account"       			: rem,
+								"debit_in_account_currency" : flt(salary_detail.amount),
+								"cost_center"   			: salary_detail.cost_center,
+								"party_check"				: 0,
+								"account_type"				: salary_detail.account_type if salary_detail.party_type == "Employee" else "",
+								"party_type"				: salary_detail.party_type if salary_detail.party_type == "Employee" else "",
+								"party"						: salary_detail.party if salary_detail.party_type == "Employee" else "",
 								"reference_type"			: self.doctype,
 								"reference_name"			: self.name,
 								"salary_component"			: salary_detail.salary_component
 							})
-					else:
-						
-						remittance_amount += flt(salary_detail.amount)
-						posting.setdefault(salary_detail.salary_component, []).append({
-							"account"       			: rem,
-							"debit_in_account_currency" : flt(salary_detail.amount),
-							"cost_center"   			: salary_detail.cost_center,
-							"party_check"				: 0,
-							"account_type"				: salary_detail.account_type if salary_detail.party_type == "Employee" else "",
-							"party_type"				: salary_detail.party_type if salary_detail.party_type == "Employee" else "",
-							"party"						: salary_detail.party if salary_detail.party_type == "Employee" else "",
-							"reference_type"			: self.doctype,
-							"reference_name"			: self.name,
-							"salary_component"			: salary_detail.salary_component
-						})
-				
-				posting.setdefault(salary_detail.salary_component, []).append({
-					"account"						: default_bank_account,
-					"credit_in_account_currency" 	: flt(remittance_amount),
-					"cost_center"					: salary_detail.cost_center,
-					"party_check"					: 0,
-					"reference_type"				: self.doctype,
-					"reference_name"				: self.name,
-					"salary_component"				: salary_detail.salary_component
-				})
+					
+					posting.setdefault(salary_detail.salary_component, []).append({
+						"account"						: default_bank_account,
+						"credit_in_account_currency" 	: flt(remittance_amount),
+						"cost_center"					: salary_detail.cost_center,
+						"party_check"					: 0,
+						"reference_type"				: self.doctype,
+						"reference_name"				: self.name,
+						"salary_component"				: salary_detail.salary_component
+					})
 
 		# To Bank
 		if posting.get("to_payables") and len(posting.get("to_payables")):

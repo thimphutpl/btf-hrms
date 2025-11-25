@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:scheme_name",
  "creation": "2025-11-25 11:45:00.456159",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -19,10 +20,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-25 11:45:00.456159",
+ "modified": "2025-11-25 12:17:49.409979",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Financial Scheme",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

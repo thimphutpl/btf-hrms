@@ -20,6 +20,7 @@
   "company",
   "department",
   "attendance_request",
+  "reference_name",
   "details_section",
   "shift",
   "in_time",
@@ -50,6 +51,7 @@
   {
    "fieldname": "employee",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "in_global_search": 1,
    "in_standard_filter": 1,
    "label": "Employee",
@@ -86,7 +88,7 @@
    "no_copy": 1,
    "oldfieldname": "status",
    "oldfieldtype": "Select",
-   "options": "\nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home",
+   "options": "\nPresent\nAbsent\nOn Leave\nHalf Day\nWork From Home\nTour",
    "reqd": 1,
    "search_index": 1
   },
@@ -202,13 +204,19 @@
   {
    "fieldname": "column_break_18",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-ok",
  "idx": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-02-09 14:17:38.315313",
+ "modified": "2025-11-08 14:15:25.092189",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Attendance",
@@ -265,6 +273,22 @@
    "role": "Employee",
    "select": 1,
    "share": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Approver",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
   }
  ],
  "search_fields": "employee,employee_name,attendance_date,status",

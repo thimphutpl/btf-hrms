@@ -366,7 +366,8 @@ def get_permission_query_conditions(user):
     # Allow full access to admin and HR roles
     if user == "Administrator" or "HR User" in user_roles or "HR Manager" in user_roles:
         return
-
+  
+  
     # Base conditions: owner, employee link, and approver view
     conditions = f"""
 		(

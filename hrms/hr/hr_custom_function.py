@@ -249,6 +249,15 @@ def get_approver(employee):
 	department = frappe.db.get_value("Employee", employee, "department")
 	empid=frappe.db.get_value("Department", department, "approver")
 	approver = frappe.db.get_value("Employee", empid, "user_id")
+	if employee==empid:
+		hr_approver=frappe.db.get_single_value('HR Settings','hr_manager')
+		email=frappe.db.get_value("Employee", hr_approver, "user_id")
+		if not email:
+			frappe.throw("HR Manager is not in HR Settings")
+		#reports_to = email
+		approver = email
+		
+	
 
 
 	return approver
@@ -258,6 +267,12 @@ def get_approver(employee):
 def get_reports_to(employee):
 	empid = frappe.db.get_value("Employee", employee, "reports_to")
 	reports_to = frappe.db.get_value("Employee", empid, "user_id")
+	if not reports_to:
+		hr_approver=frappe.db.get_single_value('HR Settings','hr_manager')
+		email=frappe.db.get_value("Employee", hr_approver, "user_id")
+		if not email:
+			frappe.throw("HR Manager is not in HR Settings")
+		reports_to = email 
 	
 	return reports_to
 

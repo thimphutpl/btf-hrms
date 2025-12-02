@@ -28,7 +28,7 @@ class TravelClaim(Document):
         self.get_advance()
         self.calculate_amount()
         validate_workflow_states(self)
-        if self.workflow_state not in ("Approved","Cancelled"):
+        if self.workflow_state not in ("Approved","Cancelled","Draft"):
             notify_workflow_states(self)
 
     def on_submit(self):
@@ -57,10 +57,12 @@ class TravelClaim(Document):
             )
 
     def calculate_amount(self):
-        total, advance_amount = 0.0, 0.0
+        total,base_total,advance_amount = 0.0, 0.0,0.0
         for d in self.get("items"):
+            #frappe.msgprint(str(d.mileage_rate))
             # Recalculate DSA amount based on percentage
             self.calculate_dsa_amount(d)
+            d.amount=d.amount+d.mileage_amount
             total += flt(d.amount)
         self.total_amount = flt(total)
 
@@ -286,22 +288,29 @@ def get_travel_claim(dt, dn):
 
         # Calculate initial DSA amount (this will be recalculated when percentage changes)
         if doc.travel_type == "International" and d.country:
-            dsa_international = frappe.get_doc("DSA Out Country", d.country)
-            if not dsa_international:
-                frappe.throw(f"DSA rates not set for country: {d.country}")
+            if d.country=="Bhutan":
+                item["dsa"] = dsa * flt(item["dsa_percent"]) / 100
+                
+            else:
+                dsa_international = frappe.get_doc("DSA Out Country", d.country)
+                if not dsa_international:
+                    frappe.throw(f"DSA rates not set for country: {d.country}")
 
-            grade_found = False
-            for dsa_int in dsa_international.country_dsa_detail:
-                if dsa_int.grade == employee_grade:
-                    base_dsa_amount = flt(dsa_int.dsa) * doc.exchange_rate
-                    item["dsa"] = base_dsa_amount * flt(item["dsa_percent"]) / 100
-                    grade_found = True
-                    break
+                grade_found = False
+                for dsa_int in dsa_international.country_dsa_detail:
+                #frappe.msgprint(str(d.country))
+                
+                    
+                    if dsa_int.grade == employee_grade:
+                        base_dsa_amount = flt(dsa_int.dsa) * doc.exchange_rate
+                        item["dsa"] = base_dsa_amount * flt(item["dsa_percent"]) / 100
+                        grade_found = True
+                        break
 
-            if not grade_found:
-                frappe.throw(
-                    f"DSA rates not set for grade {employee_grade} in country {d.country}"
-                )
+                if not grade_found:
+                    frappe.throw(
+                        f"DSA rates not set for grade {employee_grade} in country {d.country}"
+                    )
         else:
             item["dsa"] = dsa * flt(item["dsa_percent"]) / 100
 

@@ -29,7 +29,7 @@ from erpnext.custom_workflow import validate_workflow_states, notify_workflow_st
 
 class TravelAuthorization(Document):
     def validate(self):
-
+        #frappe.throw("hi")
         validate_active_employee(self.employee)
 
         self.validate_travel_dates()
@@ -309,38 +309,47 @@ class TravelAuthorization(Document):
         """
         Creates a Travel Advance document linked to the given Travel Authorization.
         """
-        # frappe.throw(self.employee)
+        #frappe.throw(self.employee)
 
         # doc = frappe.get_doc(dt, dn)
         no_of_days = 0
+        last_day_intr=0
+        employee_grade = frappe.db.get_value("Employee", self.employee, "grade")
+        return_day_dsa = frappe.db.get_single_value("HR Settings", "return_day_dsa")
+        dsa = frappe.db.get_value("Employee Grade", employee_grade, "dsa")
         # #frappe.throw(str(doc.items[0].country))
         for d in self.items:
-            # frappe.msgprint("hi")
+            #frappe.msgprint(str(self))
             if d.is_last_day == 1:
+                if self.travel_type == "International":
+                    if d.country=="Bhutan":
+                        last_day_intr=frappe.db.get_value("Employee Grade", employee_grade, "dsa")
+
                 no_of_day = 0
             else:
 
                 no_of_day = date_diff(d.to_date, d.from_date) + 1
             no_of_days += no_of_day
-
+        #frappe.throw("hi")
+       # frappe.throw(str(no_of_days))
         if self.items:
             from_date = self.items[0].from_date
             to_date = self.items[-1].from_date if len(self.items) > 1 else from_date
 
-        employee_grade = frappe.db.get_value("Employee", self.employee, "grade")
-        return_day_dsa = frappe.db.get_single_value("HR Settings", "return_day_dsa")
-        dsa = frappe.db.get_value("Employee Grade", employee_grade, "dsa")
+        
         # frappe.throw(str(no_of_day))
 
         if self.travel_type == "International":
             country = frappe.get_doc("DSA Out Country", self.items[0].country)
+            # frappe.msgprint(str(country))
             if not country:
                 frappe.throw("country in not set in DSA OUT Countery")
             grade = False
             for dsa_int in country.country_dsa_detail:
-
+                #frappe.msgprint(str(dsa_int.dsa))
                 if dsa_int.grade == employee_grade:
-
+                    #frappe.msgprint(str(dsa_int.dsa))
+                    
                     dsa = flt(dsa_int.dsa) * self.exchange_rate
                     grade = True
                     break
@@ -348,9 +357,24 @@ class TravelAuthorization(Document):
             if grade == False:
                 frappe.throw("DSa is not net grade")
 
-        self.estimated_amount = flt(dsa) * flt(no_of_days) + (
-            flt(return_day_dsa) / 100 * flt(dsa)
-        )
+            if last_day_intr==0:
+        
+                self.estimated_amount = flt(dsa) * flt(no_of_days) + (
+                    flt(return_day_dsa) / 100 * flt(dsa)
+                )
+            else:
+                self.estimated_amount = flt(dsa) * flt(no_of_days) + (
+                    flt(return_day_dsa) / 100 * flt(last_day_intr)
+                )
+
+                #frappe.throw("pl")
+
+        else:
+            self.estimated_amount = flt(dsa) * flt(no_of_days) + (
+                flt(return_day_dsa) / 100 * flt(dsa)
+            )
+            #frappe.throw(str(last_day_intr))
+        #frappe.throw(str(no_of_days))
         # frappe.throw(str(self.estimated_amount))
         # adv.travel_authorization = doc.name
 

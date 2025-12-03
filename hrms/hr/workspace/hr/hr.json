@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"vikWSkNm6_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"uDOYWzwKtR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee\",\"col\":3}},{\"id\":\"I6_emXnY_t\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leave Application\",\"col\":3}},{\"id\":\"wFoyPJh4CQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"HR Dashboard\",\"col\":3}},{\"id\":\"VH7xfoiwZk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Recruitment Dashboard\",\"col\":3}},{\"id\":\"6aFCt5E_qc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Lifecycle Dashboard\",\"col\":3}},{\"id\":\"7tyJvj-ifc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Dashboard\",\"col\":3}},{\"id\":\"w9o1s1IpR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Claims Dashboard\",\"col\":3}},{\"id\":\"4wF6ajkH-i\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"43nhZZwH82\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Masters Setting</b></span>\",\"col\":12}},{\"id\":\"KPLfCcHE-n\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":4}},{\"id\":\"S4jbFbMsXb\",\"type\":\"card\",\"data\":{\"card_name\":\"Employee Records\",\"col\":4}},{\"id\":\"I6-3lpWeEW\",\"type\":\"card\",\"data\":{\"card_name\":\"Attendance\",\"col\":4}},{\"id\":\"7nLkJGumoK\",\"type\":\"card\",\"data\":{\"card_name\":\"Leave & Holiday Setting\",\"col\":4}},{\"id\":\"_zGZESQNFX\",\"type\":\"card\",\"data\":{\"card_name\":\"Payroll\",\"col\":4}},{\"id\":\"GUQETqxnG4\",\"type\":\"card\",\"data\":{\"card_name\":\"Others Transaction\",\"col\":4}},{\"id\":\"K-FlNhY8yX\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Transaction<b></b></span>\",\"col\":12}},{\"id\":\"A8ywkUyrrt\",\"type\":\"card\",\"data\":{\"card_name\":\"Expense Claim\",\"col\":4}},{\"id\":\"dS3oYABZlI\",\"type\":\"card\",\"data\":{\"card_name\":\"Leave Application\",\"col\":4}},{\"id\":\"WXrwqxtCER\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Reports</b></span>\",\"col\":12}},{\"id\":\"S9gMRQrdqz\",\"type\":\"card\",\"data\":{\"card_name\":\"Key Reports\",\"col\":4}},{\"id\":\"XzovIAfUyt\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"vikWSkNm6_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"uDOYWzwKtR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee\",\"col\":3}},{\"id\":\"I6_emXnY_t\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leave Application\",\"col\":3}},{\"id\":\"wFoyPJh4CQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"HR Dashboard\",\"col\":3}},{\"id\":\"VH7xfoiwZk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Recruitment Dashboard\",\"col\":3}},{\"id\":\"L1lZJJ3B61\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Travel Authorization\",\"col\":3}},{\"id\":\"6aFCt5E_qc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Lifecycle Dashboard\",\"col\":3}},{\"id\":\"7tyJvj-ifc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Dashboard\",\"col\":3}},{\"id\":\"w9o1s1IpR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Claims Dashboard\",\"col\":3}},{\"id\":\"5Qp1U1uN11\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Attendance\",\"col\":3}},{\"id\":\"4wF6ajkH-i\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"43nhZZwH82\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Masters Setting</b></span>\",\"col\":12}},{\"id\":\"KPLfCcHE-n\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":4}},{\"id\":\"S4jbFbMsXb\",\"type\":\"card\",\"data\":{\"card_name\":\"Employee Records\",\"col\":4}},{\"id\":\"I6-3lpWeEW\",\"type\":\"card\",\"data\":{\"card_name\":\"Attendance\",\"col\":4}},{\"id\":\"7nLkJGumoK\",\"type\":\"card\",\"data\":{\"card_name\":\"Leave & Holiday Setting\",\"col\":4}},{\"id\":\"_zGZESQNFX\",\"type\":\"card\",\"data\":{\"card_name\":\"Payroll\",\"col\":4}},{\"id\":\"GUQETqxnG4\",\"type\":\"card\",\"data\":{\"card_name\":\"Others Transaction\",\"col\":4}},{\"id\":\"K-FlNhY8yX\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Transaction<b></b></span>\",\"col\":12}},{\"id\":\"A8ywkUyrrt\",\"type\":\"card\",\"data\":{\"card_name\":\"Expense Claim\",\"col\":4}},{\"id\":\"dS3oYABZlI\",\"type\":\"card\",\"data\":{\"card_name\":\"Leave Application\",\"col\":4}},{\"id\":\"WXrwqxtCER\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Reports</b></span>\",\"col\":12}},{\"id\":\"S9gMRQrdqz\",\"type\":\"card\",\"data\":{\"card_name\":\"Key Reports\",\"col\":4}},{\"id\":\"XzovIAfUyt\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
  "creation": "2020-03-02 15:48:58.322521",
  "custom_blocks": [],
  "docstatus": 0,
@@ -67,65 +67,6 @@
    "label": "HR Settings",
    "link_count": 0,
    "link_to": "HR Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Records",
-   "link_count": 5,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee",
-   "link_count": 0,
-   "link_to": "Employee",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Group",
-   "link_count": 0,
-   "link_to": "Employee Group",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Grade",
-   "link_count": 0,
-   "link_to": "Employee Grade",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employment Type",
-   "link_count": 0,
-   "link_to": "Employment Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Promotion Update",
-   "link_count": 0,
-   "link_to": "Promotion Entry",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -250,55 +191,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Expense Claim",
-   "link_count": 4,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Travel Authorization",
-   "link_count": 0,
-   "link_to": "Travel Authorization",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Travel Claim",
-   "link_count": 0,
-   "link_to": "Travel Claim",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Advance",
-   "link_count": 0,
-   "link_to": "Employee Advance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Process Employee Transfer Benefits",
-   "link_count": 0,
-   "link_to": "Employee Transfer",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Leave Application",
    "link_count": 1,
    "link_type": "DocType",
@@ -387,7 +279,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Key Reports",
+   "label": "Employee Records",
    "link_count": 4,
    "link_type": "DocType",
    "onboard": 0,
@@ -396,12 +288,109 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Employee",
+   "link_count": 0,
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Group",
+   "link_count": 0,
+   "link_to": "Employee Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Grade",
+   "link_count": 0,
+   "link_to": "Employee Grade",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employment Type",
+   "link_count": 0,
+   "link_to": "Employment Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Expense Claim",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Travel Authorization",
+   "link_count": 0,
+   "link_to": "Travel Authorization",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Travel Claim",
+   "link_count": 0,
+   "link_to": "Travel Claim",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Advance",
+   "link_count": 0,
+   "link_to": "Employee Advance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Travel Adjustment",
+   "link_count": 0,
+   "link_to": "Travel Adjustment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Key Reports",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
    "label": "Monthly Attendance Sheet",
    "link_count": 0,
-   "link_to": "Monthly Attendance Sheet",
+   "link_to": "Monthly Attendance Entry Report",
    "link_type": "Report",
    "onboard": 0,
-   "report_ref_doctype": "Attendance",
    "type": "Link"
   },
   {
@@ -433,9 +422,19 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Daily Attendance Record",
+   "link_count": 0,
+   "link_to": "Daily Attendance Record",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2025-10-22 19:23:29.335634",
+ "modified": "2025-12-03 21:36:00.033908",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR",
@@ -478,6 +477,14 @@
    "type": "Dashboard"
   },
   {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Travel Authorization",
+   "link_to": "Travel Authorization",
+   "stats_filter": "[[\"Travel Authorization\",\"workflow_state\",\"=\",\"Waiting Approval\",false],[\"Travel Authorization\",\"workflow_state\",\"=\",\"Waiting for Verification\",false]]",
+   "type": "DocType"
+  },
+  {
    "color": "Grey",
    "doc_view": "List",
    "label": "Leave Application",
@@ -491,6 +498,13 @@
    "label": "Attendance Dashboard",
    "link_to": "Attendance",
    "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Daily Attendance",
+   "link_to": "daily-attendance",
+   "type": "Page"
   },
   {
    "color": "Grey",

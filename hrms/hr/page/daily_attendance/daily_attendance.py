@@ -12,6 +12,7 @@ import calendar
 
 @frappe.whitelist()
 def sign_in():
+    
     employee = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "name")
     
     if not employee:
@@ -29,23 +30,35 @@ def sign_in():
     existing_leave = frappe.db.exists("Leave Application", {
         "employee": employee,
         "from_date": ("<=", today),
-        "to_date":(">=", today)
+        "to_date":(">=", today),
         "docstatus": 1  # Draft or Submitted
     })
 
-    # existing_holiday = frappe.db.exists("Daily Attendance Entry", {
-    #     "employee": employee,
-    #     "attendance_date": today,
-    #     "docstatus": ["<", 2]  # Draft or Submitted
-    # })
+    tour_date=frappe.db.exists("Attendance", {
+        "employee": employee,
+        "attendance_date": today,
+        "status":"Tour",
+        "docstatus": 1  # Draft or Submitted
+    })
+
+    
+    holiday=get_holidays(employee, today, holiday_list=None)
+    if holiday:
+        frappe.throw("today's date is  already exists in holiday")
     if existing_attendance:
-        frappe.throw("Attendance for today already exists.")
+        frappe.throw("You had already sign in.")
+
+    if existing_leave:
+        frappe.throw("Already in leave")
+    if tour_date:
+        # Commit current transaction
+        frappe.throw("Already in tour")
     
     # Create new attendance record
     attendance = frappe.new_doc("Daily Attendance Entry")
     attendance.employee = employee
     attendance.attendance_date = today
-    attendance.status = "Half Day"  # Initial status
+    attendance.status = "Present"  # Initial status
     attendance.sign_in_time = now_datetime()
     attendance.flags.ignore_permissions = True
     attendance.insert()
@@ -55,6 +68,7 @@ def sign_in():
 @frappe.whitelist()
 def sign_out():
     employee = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "name")
+    #holiday=
     
     if not employee:
         frappe.throw("No employee found for the current user.")
@@ -66,7 +80,7 @@ def sign_out():
         "employee": employee,
         "attendance_date": today,
         "docstatus": ["<", 2],
-        "status":"Present"
+        "sign_out_time":["is", "set"]
     })
     attendance_name = frappe.db.get_value("Daily Attendance Entry", {
         "employee": employee,
@@ -78,11 +92,11 @@ def sign_out():
         frappe.throw("No sign-in found for today.")
     
     if existing_attendance:
-        frappe.throw("You have alread sign out")
+        frappe.throw("You had already sign out")
 
     attendance = frappe.get_doc("Daily Attendance Entry", attendance_name)
     attendance.sign_out_time = now_datetime()
-    attendance.status = "Present"  # Update status to Present
+    #attendance.status = "Present"  # Update status to Present
     attendance.flags.ignore_permissions = True
     attendance.save()
     
@@ -122,17 +136,17 @@ def is_ip_authorized(ip_address):
 
 
 
-@frappe.whitelist()
-def get_holidays(employee, from_date, to_date, holiday_list=None):
+#@frappe.whitelist()
+def get_holidays(employee, date, holiday_list=None):
 	"""get holidays between two dates for the given employee"""
 	if not holiday_list:
 		holiday_list = get_holiday_list_for_employee(employee)
 
 	holidays = frappe.db.sql(
 		"""select count(distinct holiday_date) from `tabHoliday` h1, `tabHoliday List` h2
-		where h1.parent = h2.name and h1.holiday_date between %s and %s
+		where h1.parent = h2.name and h1.holiday_date = %s
 		and h2.name = %s""",
-		(from_date, to_date, holiday_list),
+		(date, holiday_list),
 	)[0][0]
 
 	return holidays

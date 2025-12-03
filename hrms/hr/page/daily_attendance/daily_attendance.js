@@ -88,6 +88,7 @@ frappe.pages['daily-attendance'].on_page_load = function(wrapper) {
             if (response.message) {
                 frappe.msgprint(__("Signed in successfully. Attendance: {0}", [response.message.attendance]));
                 console.log("Success:", response.message);
+                load_todays_attendance();
             }
         },
         error: function(err) {
@@ -104,6 +105,7 @@ $('#sign-out').on('click', function() {
             if (response.message) {
                 frappe.msgprint(__("Signed out successfully. Attendance: {0}", [response.message.attendance]));
                 console.log("Success:", response.message);
+                load_todays_attendance();
             }
         },
         error: function(err) {

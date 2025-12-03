@@ -16,6 +16,7 @@
   {
    "fieldname": "employee",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Employee",
    "options": "Employee"
   },
@@ -23,6 +24,7 @@
    "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Employee Name"
   },
   {
@@ -34,22 +36,25 @@
   {
    "fieldname": "sign_in_time",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Sign In Time"
   },
   {
    "fieldname": "sign_out_time",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Sign Out time"
   },
   {
    "fieldname": "attendance_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Attendance Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-15 00:43:28.219558",
+ "modified": "2025-11-03 00:30:53.604787",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Daily Attendance Entry",

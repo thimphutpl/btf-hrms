@@ -89,7 +89,7 @@ class TravelClaim(Document):
             )
 
         # Calculate actual DSA amount based on percentage
-        if self.travel_type == "International" and item.country:
+        if self.travel_type == "International" and item.country and item.country!='Bhutan':
             # For international travel, get DSA from DSA Out Country
             dsa_international = frappe.get_doc("DSA Out Country", item.country)
             if not dsa_international:

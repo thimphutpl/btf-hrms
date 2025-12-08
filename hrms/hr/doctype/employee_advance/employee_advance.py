@@ -23,6 +23,7 @@ from dateutil.relativedelta import relativedelta
 
 import erpnext
 from erpnext.accounts.doctype.journal_entry.journal_entry import get_default_bank_cash_account
+from erpnext.custom_workflow import validate_workflow_states, notify_workflow_states
 
 import hrms
 from hrms.hr.utils import validate_active_employee
@@ -53,6 +54,9 @@ class EmployeeAdvance(Document):
 		self.validate_dates()
 		self.calculate_amount()
 		self.set_max_amount()
+		validate_workflow_states(self)
+		if self.workflow_state not in ("Approved","Cancelled","Draft"):
+			notify_workflow_states(self)
 
 
 	def set_max_amount(self):
@@ -68,10 +72,12 @@ class EmployeeAdvance(Document):
 			self.advance_account = frappe.db.get_value("Company", self.company, "default_interest_free_loan_account")
 			self.max_amount=max_amount_intrs_fre_ln * self.gross_pay
 	def on_submit(self):
+		notify_workflow_states(self)
 		self.post_journal_entry()
 		
 
 	def on_cancel(self):
+		notify_workflow_states(self)
 		self.ignore_linked_doctypes = ("GL Entry", "Payment Ledger Entry")
 		self.check_linked_payment_entry()
 		self.update_salary_structure(cancel=True)
@@ -132,11 +138,11 @@ class EmployeeAdvance(Document):
 
 		#return max_months
 		# return {
-        # "max_months": max_months,
-        # "max_amount_intrs_fre_ln": max_amount_intrs_fre_ln
+		# "max_months": max_months,
+		# "max_amount_intrs_fre_ln": max_amount_intrs_fre_ln
 		# }
 		return {"max_months": max_months,
-        "max_amount_intrs_fre_ln": max_amount_intrs_fre_ln
+		"max_amount_intrs_fre_ln": max_amount_intrs_fre_ln
 		}
 	def update_salary_structure(self, cancel=False):
 		if cancel:
@@ -801,7 +807,7 @@ def get_permission_query_conditions(user):
 			where `tabEmployee`.name = `tabEmployee Advance`.employee
 			and `tabEmployee`.user_id = '{user}')
 		or
-		(`tabEmployee Advance`.benefit_approver = '{user}' and `tabEmployee Advance`.workflow_state not in  ('Draft','Approved','Rejected','Cancelled'))
+		(`tabEmployee Advance`.approver = '{user}' and `tabEmployee Advance`.workflow_state not in  ('Draft','Approved','Rejected','Cancelled'))
 	)""".format(user=user)
 
 '''

@@ -1123,17 +1123,39 @@ def get_leave_balance_on(
     leaves_taken = get_leaves_for_period(
         employee, leave_type, allocation.from_date, end_date
     )
-
+    
     remaining_leaves = get_remaining_leaves(allocation, leaves_taken, date, cf_expiry)
+    #frappe.msgprint(str(remaining_leaves))
 
     if for_consumption:
         return remaining_leaves
     else:
+        if leave_type=="Earned Leave":
+            #frappe.throw(str(end_date))
+            total_leaves=0
+            Ledger = frappe.qb.DocType("Leave Ledger Entry")
+
+            query = (
+                frappe.qb.from_(Ledger)
+                .select(Sum(Ledger.leaves).as_("total_leaves"))
+                .where(
+                    (Ledger.employee == employee)
+                    & (Ledger.leave_type == 'Earned leave')
+                    & (Ledger.transaction_type == 'Merge CL To EL')
+                    & (Ledger.from_date == allocation.from_date)
+                    & (Ledger.to_date == end_date)
+                )
+            )
+
+            result = query.run(as_dict=True)
+            total_leaves = result[0]['total_leaves'] if result else 0
+            #frappe.throw(str(total_leaves ))
+            remaining_leaves.leave_balance +=flt(total_leaves)
         return remaining_leaves.get("leave_balance")
 
 
 def get_leave_allocation_records(employee, date, leave_type=None):
-    # frappe.throw(leave_type)
+    
     """Returns the total allocated leaves and carry forwarded leaves based on ledger entries"""
     Ledger = frappe.qb.DocType("Leave Ledger Entry")
     LeaveAllocation = frappe.qb.DocType("Leave Allocation")
@@ -1200,6 +1222,7 @@ def get_leave_allocation_records(employee, date, leave_type=None):
 
     allocated_leaves = frappe._dict()
     for d in allocation_details:
+        #frappe.msgprint(str(d.leave_type))
         allocated_leaves.setdefault(
             d.leave_type,
             frappe._dict(
@@ -1244,12 +1267,15 @@ def get_remaining_leaves(
     def _get_remaining_leaves(remaining_leaves, end_date):
         """Returns minimum leaves remaining after comparing with remaining days for allocation expiry"""
         if remaining_leaves > 0:
+            
             remaining_days = date_diff(end_date, date) + 1
             remaining_leaves = min(remaining_days, remaining_leaves)
+            #frappe.msgprint(str(remaining_leaves))
 
         return remaining_leaves
 
     if cf_expiry and allocation.unused_leaves:
+        
         # allocation contains both carry forwarded and new leaves
         new_leaves_taken, cf_leaves_taken = get_new_and_cf_leaves_taken(
             allocation, cf_expiry
@@ -1271,10 +1297,12 @@ def get_remaining_leaves(
             flt(allocation.new_leaves_allocated) + flt(new_leaves_taken)
         ) + flt(remaining_cf_leaves)
     else:
+        
         # allocation only contains newly allocated leaves
         leave_balance = leave_balance_for_consumption = flt(
             allocation.total_leaves_allocated
         ) + flt(leaves_taken)
+        #frappe.msgprint(str(leave_balance))
 
     remaining_leaves = _get_remaining_leaves(
         leave_balance_for_consumption, allocation.to_date
@@ -1360,6 +1388,10 @@ def get_leaves_for_period(
                 )
                 * -1
             )
+
+        elif leave_entry.transaction_type == "Merge CL To EL" and leave_entry.leave_type=='Casual Leave':
+            leave_days +=leave_entry.leaves
+
 
     return leave_days
 

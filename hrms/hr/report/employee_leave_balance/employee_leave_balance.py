@@ -100,6 +100,36 @@ def get_data(filters: Filters) -> list:
 			row = frappe._dict({"leave_type": leave_type})
 
 		for employee in active_employees:
+			employee_id = employee['name']
+			bal_mgr_cl_el=0
+			if leave_type=='Earned Leave':
+				
+				Leavebal = frappe.qb.DocType("Leave Ledger Entry")
+
+				leave_bal = (
+					frappe.qb.from_(Leavebal)
+					.select(Leavebal.leaves)
+					.where(
+						(Leavebal.from_date <= filters.from_date)
+						& (Leavebal.to_date >= filters.to_date)
+						& (Leavebal.docstatus == 1)
+						& (Leavebal.leave_type == leave_type)
+						& (Leavebal.employee == employee_id)
+						& (Leavebal.transaction_type == 'Merge CL To EL')
+					)
+				).run()  
+
+				# Result will be like: [(leaves_value,)] if exists
+				if leave_bal:
+					leaves_value = leave_bal[0][0]
+					bal_mgr_cl_el=leaves_value
+					#frappe.throw(str(leaves_value))
+					#frappe.log_error(f"Leaves value: {leaves_value}", "Leave Debug")
+				else:
+					bal_mgr_cl_el=0
+					
+				
+				
 			if consolidate_leave_types:
 				row = frappe._dict()
 			else:
@@ -122,7 +152,7 @@ def get_data(filters: Filters) -> list:
 			row.opening_balance = flt(opening, precision)
 			row.leaves_taken = flt(leaves_taken, precision)
 
-			closing = new_allocation + opening - (row.leaves_expired + leaves_taken)
+			closing = new_allocation + opening + bal_mgr_cl_el - (row.leaves_expired + leaves_taken)
 			row.closing_balance = flt(closing, precision)
 			row.indent = 1
 			data.append(row)

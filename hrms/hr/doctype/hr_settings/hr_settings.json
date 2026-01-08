@@ -95,11 +95,30 @@
   "travel_claim_approval_notification_template",
   "column_break_kygu",
   "travel_claim_status_notification_template",
+  "leave_encashment_settings_section",
+  "encashment_approval_notification_template",
+  "column_break_telk",
+  "encashment_status_notification_template",
+  "employee_advance_section",
+  "employee_advance_approval_notification_template",
+  "column_break_ksbv",
+  "employee_advance_status_notification_template",
+  "leave_travel_concession_section",
+  "leave_travel_concession_approval_notification",
+  "column_break_dbyp",
+  "leave_travel_concession_status_notification",
+  "employee_benefits_section",
+  "employee_benefits_approval_notification_template",
+  "column_break_ifss",
+  "employee_benefits_status_notification_template",
+  "employee_separation_section",
+  "employee_separation_approval_notification_template",
+  "column_break_klqk",
+  "employee_separation_status_notification_template",
   "attendance_tab",
   "office_gobal_ip",
   "office_local_start_ip",
-  "office_local_end_ip",
-  "test"
+  "office_local_end_ip"
  ],
  "fields": [
   {
@@ -564,11 +583,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "test",
-   "fieldtype": "Data",
-   "label": "test"
-  },
-  {
    "fieldname": "hr_approver",
    "fieldtype": "Link",
    "label": "Hr Approver",
@@ -639,13 +653,123 @@
    "fieldtype": "Link",
    "label": "Travel Authorization Status Notification Template",
    "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "leave_encashment_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Encashment Settings"
+  },
+  {
+   "fieldname": "encashment_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Encashment Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_telk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "encashment_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Encashment Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "employee_advance_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Advance"
+  },
+  {
+   "fieldname": "employee_advance_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Advance Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_ksbv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_advance_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Advance Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "leave_travel_concession_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Travel Concession"
+  },
+  {
+   "fieldname": "column_break_dbyp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "leave_travel_concession_approval_notification",
+   "fieldtype": "Link",
+   "label": "Leave Travel Concession Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "leave_travel_concession_status_notification",
+   "fieldtype": "Link",
+   "label": "Leave Travel Concession Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "employee_benefits_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Benefits"
+  },
+  {
+   "fieldname": "column_break_ifss",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "employee_separation_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Separation"
+  },
+  {
+   "fieldname": "column_break_klqk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_benefits_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Benefits  Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "employee_benefits_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Benefits  Status Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "employee_separation_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Separation  Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "employee_separation_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Employee Separation  Status Notification Template",
+   "options": "Email Template"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-11-07 10:20:44.928588",
+ "modified": "2025-12-05 16:27:41.425458",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

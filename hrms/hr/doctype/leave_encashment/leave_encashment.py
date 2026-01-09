@@ -187,6 +187,7 @@ class LeaveEncashment(Document):
         allocation = self.get_leave_allocation()
         leave_bal_mr_cl=self.get_laave_bal_mr()
         #frappe.throw(str(leave_bal_mr_cl))
+        #frappe.throw(str(leave_bal_mr_cl))
         if not allocation:
             frappe.throw(
                 _("No Leaves Allocated to Employee: {0} for Leave Type: {1}").format(
@@ -202,7 +203,8 @@ class LeaveEncashment(Document):
                 self.employee,
                 self.leave_type,
                 allocation.from_date,
-                self.encashment_date,
+                allocation.to_date,
+                #self.encashment_date,
             )
         )
         # frappe.throw(str(self.leave_balance))

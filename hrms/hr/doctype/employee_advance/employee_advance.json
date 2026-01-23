@@ -374,7 +374,8 @@
    "fieldname": "approver_designation",
    "fieldtype": "Link",
    "label": "Approver Designation",
-   "options": "Designation"
+   "options": "Designation",
+   "read_only": 1
   },
   {
    "fieldname": "advance_type",
@@ -391,7 +392,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-08 23:58:16.251913",
+ "modified": "2026-01-21 18:25:34.814818",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Advance",

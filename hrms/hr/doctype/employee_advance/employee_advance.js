@@ -3,14 +3,15 @@
 
 frappe.ui.form.on("Employee Advance", {
 	setup: function (frm) {
-		frm.set_query("employee", function () {
-			return {
-				filters: {
-					status: "Active",
-				},
-			};
-		});
-
+		// frm.set_query("employee", function () {
+		// 	return {
+		// 		filters: {
+		// 			status: "Active",
+					
+		// 		},
+		// 	};
+		// });
+		frm.set_query("employee", erpnext.queries.employee);
 		frm.set_query("advance_account", function () {
 			if (!frm.doc.employee) {
 				frappe.msgprint(__("Please select employee first"));
@@ -41,6 +42,15 @@ frappe.ui.form.on("Employee Advance", {
 	},
 
 	refresh(frm) {
+		// frm.set_query("employee", function () {
+		// 	return {
+		// 		filters: {
+		// 			status: "Active",
+		// 			user_id:frappe.session.user,
+					
+		// 		},
+		// 	};
+		// });
 		refresh_html(frm);
 	},
 

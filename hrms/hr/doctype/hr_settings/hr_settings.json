@@ -85,8 +85,10 @@
   "user_creation",
   "travel_authorization_settings_section",
   "travel_authorization_approval_notification_template",
+  "travel_adjustment_approval_notification_template",
   "column_break_webf",
   "travel_authorization_status_notification_template",
+  "travel_adjustment_status_notification_template",
   "leave_application_settings_section",
   "leave_application_approval_notification_template",
   "column_break_zywj",
@@ -763,13 +765,25 @@
    "fieldtype": "Link",
    "label": "Employee Separation  Status Notification Template",
    "options": "Email Template"
+  },
+  {
+   "fieldname": "travel_adjustment_approval_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Adjustment Approval Notification Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "travel_adjustment_status_notification_template",
+   "fieldtype": "Link",
+   "label": "Travel Adjustment Status Notification Template",
+   "options": "Email Template"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-12-05 16:27:41.425458",
+ "modified": "2026-01-25 12:31:45.711349",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

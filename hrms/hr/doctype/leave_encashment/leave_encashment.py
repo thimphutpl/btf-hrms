@@ -13,6 +13,7 @@ from frappe.utils import (
     flt,
     now_datetime,
 )
+from datetime import date
 
 from hrms.hr.doctype.leave_application.leave_application import get_leaves_for_period
 from hrms.hr.doctype.leave_ledger_entry.leave_ledger_entry import (
@@ -132,6 +133,28 @@ class LeaveEncashment(Document):
                     frappe.bold(count - 1), frappe.bold(self.leave_period)
                 )
             )
+
+        latest_record = frappe.db.get_all(
+            "Leave Encashment",
+            filters={
+                "employee": self.employee,
+                "docstatus": 1
+            },
+            fields=["encashment_date"],
+            order_by="encashment_date desc",
+            limit=1
+        )
+
+        if latest_record:
+            current_date = date.today()
+            latest_date = getdate(latest_record[0].encashment_date)
+            date_diff = (current_date - latest_date).days
+            if date_diff < 366:
+                frappe.throw("the minimum time periored required for encashment requirement is one year")
+            
+        else:
+            
+            return
 
     def set_actual_encashable_days(self):
         # frappe.throw("hi")

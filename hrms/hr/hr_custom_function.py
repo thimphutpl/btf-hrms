@@ -134,9 +134,9 @@ def get_officiating_employee(employee):
 	return officiate
 
 def post_earned_leaves():	
-	if not getdate(frappe.utils.nowdate()) == getdate(get_first_day(frappe.utils.nowdate())):
+	# if not getdate(frappe.utils.nowdate()) == getdate(get_first_day(frappe.utils.nowdate())):
 		
-		return 0
+	# 	return 0
 	
 	date = add_days(frappe.utils.nowdate(), -20)
 	start = get_first_day(date);
@@ -238,16 +238,27 @@ def get_date_diff(start_date, end_date):
 
 @frappe.whitelist()
 def get_approver(employee):
-	# leave_approver, department = frappe.db.get_value("Employee", employee, ["leave_approver", "department"])
-
-	# if not leave_approver and department:
-	# 	leave_approver = frappe.db.get_value(
-	# 		"Department Approver",
-	# 		{"parent": department, "parentfield": "leave_approvers", "idx": 1},
-	# 		"approver",
-	# 	)
+	current_date=frappe.utils.nowdate()
+	#frappe.throw(str(currnt_date))
+	
 	department = frappe.db.get_value("Employee", employee, "department")
 	empid=frappe.db.get_value("Department", department, "approver")
+	officiating_employee= frappe.db.get_value("Officiating Employee",
+																	filters={
+																		"employee": empid,
+																		"from_date": ["<=", current_date],
+																		"to_date": [">=", current_date]
+																	},
+																	 fieldname="officiate"
+																)
+	if officiating_employee:
+		
+		approver = frappe.db.get_value("Employee", officiating_employee, "user_id")
+		#frappe.throw(str(approver))
+		return approver
+
+
+	#frappe.throw("hii")										
 	approver = frappe.db.get_value("Employee", empid, "user_id")
 	if employee==empid:
 		hr_approver=frappe.db.get_single_value('HR Settings','hr_manager')
@@ -265,8 +276,22 @@ def get_approver(employee):
 
 @frappe.whitelist()
 def get_reports_to(employee):
+	current_date=frappe.utils.nowdate()
 	empid = frappe.db.get_value("Employee", employee, "reports_to")
 	reports_to = frappe.db.get_value("Employee", empid, "user_id")
+	officiating_employee= frappe.db.get_value("Officiating Employee",
+																	filters={
+																		"employee": empid,
+																		"from_date": ["<=", current_date],
+																		"to_date": [">=", current_date]
+																	},
+																	 fieldname="officiate"
+																)
+	if officiating_employee:
+		
+		reports_to = frappe.db.get_value("Employee", officiating_employee, "user_id")
+		#frappe.throw(str(approver))
+		return reports_to
 	if not reports_to:
 		hr_approver=frappe.db.get_single_value('HR Settings','hr_manager')
 		email=frappe.db.get_value("Employee", hr_approver, "user_id")
@@ -316,3 +341,7 @@ def is_ip_authorized():
 	else:
 		frappe.throw("xx")
 		return false
+
+
+
+

@@ -5,6 +5,7 @@ frappe.ui.form.on("Leave Encashment", {
 	onload: function (frm) {
 		// Ignore cancellation of doctype on cancel all.
 		frm.ignore_doctypes_on_cancel_all = ["Leave Ledger Entry"];
+		frm.set_query("employee", erpnext.queries.employee);
 	},
 	setup: function (frm) {
 		frm.set_query("leave_type", function () {
@@ -21,6 +22,8 @@ frappe.ui.form.on("Leave Encashment", {
 				},
 			};
 		});
+		frm.set_query("employee", erpnext.queries.employee);
+		       
 	},
 	refresh: function (frm) {
 		refresh_html(frm);

@@ -3,13 +3,14 @@
 
 frappe.ui.form.on("Travel Authorization", {
 	setup: function (frm) {
-		frm.set_query("employee", function () {
-			return {
-				filters: {
-					status: "Active",
-				},
-			};
-		});
+		frm.set_query("employee", erpnext.queries.employee);
+		// frm.set_query("employee", function () {
+		// 	return {
+		// 		filters: {
+		// 			status: "Active",
+		// 		},
+		// 	};
+		// });
 	},
 
 	refresh(frm) {

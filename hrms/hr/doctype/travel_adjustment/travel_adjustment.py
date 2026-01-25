@@ -33,6 +33,7 @@ class TravelAdjustment(Document):
         validate_active_employee(self.employee)
         self._validate_travel_last_day()
         validate_workflow_states(self)
+        notify_workflow_states(self)
 
     def on_update(self):
         """Check for date overlaps when the document is updated."""
@@ -119,6 +120,7 @@ class TravelAdjustment(Document):
             )
 
     def _update_travel_authorization(self, cancel=False):
+        
         """
         Update the linked Travel Authorization by deleting and re-inserting items.
         If `cancel` is True, use `itinerary`; otherwise, use `items`.

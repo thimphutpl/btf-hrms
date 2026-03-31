@@ -68,12 +68,13 @@ class LeaveAllocation(Document):
 				)
 			leave_allocated += flt(self.new_leaves_allocated)
 			if leave_allocated > max_leaves_allowed:
-				frappe.throw(
+				frappe.msgprint(
 					_(
 						"Total allocated leaves are more than maximum allocation allowed for {0} leave type for employee {1} in the period"
 					).format(self.leave_type, self.employee),
 					OverAllocationError,
 				)
+				return
 
 	def on_submit(self):
 		self.create_leave_ledger_entry()
@@ -188,6 +189,7 @@ class LeaveAllocation(Document):
 			)
 
 	def validate_allocation_overlap(self):
+		#self.from_date='2025-10-01'
 		leave_allocation = frappe.db.sql(
 			"""
 			SELECT
@@ -199,6 +201,7 @@ class LeaveAllocation(Document):
 				AND to_date >= %s AND from_date <= %s""",
 			(self.employee, self.leave_type, self.name, self.from_date, self.to_date),
 		)
+		print(self.from_date)
 
 		if leave_allocation:
 			frappe.msgprint(
@@ -214,6 +217,7 @@ class LeaveAllocation(Document):
 			)
 
 	def validate_back_dated_allocation(self):
+		
 		future_allocation = frappe.db.sql(
 			"""select name, from_date from `tabLeave Allocation`
 			where employee=%s and leave_type=%s and docstatus=1 and from_date > %s

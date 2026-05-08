@@ -14,17 +14,19 @@ frappe.ui.form.on("Travel Authorization", {
 		
 
 	},
-	onload_post_render:function(frm){
+	onload_post_render: function (frm) {
 		const selectors = [
-        'button.btn-new[data-doctype="Travel Claim"]',
-        'span.open-notification[title="Open Travel Claim"]'
-    ];
-    
-    selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-            el.style.display = 'none';
-        });
-    });
+			'button.btn-new[data-doctype="Travel Claim"]',
+			'button.btn-new[data-doctype="Travel Adjustment"]',
+			'button.btn-new[data-doctype="Payment Entry"]',
+			'button.btn-new[data-doctype="Journal Entry"]',
+			'span.open-notification[title="Open Travel Claim"]',
+		];
+		selectors.forEach(selector => {
+			document.querySelectorAll(selector).forEach(el => {
+				el.style.display = 'none';
+			});
+		});
 
 	},
 

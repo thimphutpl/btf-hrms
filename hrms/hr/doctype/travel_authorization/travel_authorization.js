@@ -11,6 +11,21 @@ frappe.ui.form.on("Travel Authorization", {
 		// 		},
 		// 	};
 		// });
+		
+
+	},
+	onload_post_render:function(frm){
+		const selectors = [
+        'button.btn-new[data-doctype="Travel Claim"]',
+        'span.open-notification[title="Open Travel Claim"]'
+    ];
+    
+    selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+            el.style.display = 'none';
+        });
+    });
+
 	},
 
 	refresh(frm) {
@@ -192,6 +207,11 @@ frappe.ui.form.on("Travel Authorization Item", {
 			}
 		}
 	},
+	form_render(frm, cdt, cdn) {
+        let row = locals[cdt][cdn];
+        row.country = '';
+        frm.refresh_field('items');
+    }
 });
 // function calculate_advance(frm) {
 // 	frappe.call({

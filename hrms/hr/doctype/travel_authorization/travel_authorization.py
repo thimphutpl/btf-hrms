@@ -31,23 +31,30 @@ class TravelAuthorization(Document):
 	def validate(self):
 		#frappe.throw("hi")
 		validate_active_employee(self.employee)
-
+		self.validate_country()
 		self.validate_travel_dates()
 		self.validate_travel_last_day()
 		self.validate_exchange_rate()
 		self.set_status()
 		self.make_travel_advance()
 		self.validate_estimated_amount()
-		validate_workflow_states(self)
+		#validate_workflow_states(self)
 		if self.workflow_state != "Approved":
-			notify_workflow_states(self)
+			pass
+			#notify_workflow_states(self)
+
+	def validate_country(self):
+		for item in self.items:
+			if not item.country:
+				frappe.throw("Country is mandatory in all Items rows.")
+
 
 	def on_update(self):
 		self.check_date_overlap()
 		self.validate_duplicate_entry()
 
 	def on_submit(self):
-		notify_workflow_states(self)
+		#notify_workflow_states(self)
 		self.create_attendance()
 		if self.advance_amount:
 			self.post_journal_entry()

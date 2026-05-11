@@ -42,6 +42,26 @@ frappe.ui.form.on("Payroll Entry", {
 	},
 
 	refresh: function (frm) {
+		frappe.call({
+				method: "frappe.client.get_value",
+				args: {
+					doctype: "Fiscal Year",
+					filters: {
+						year_start_date: ["<=", frappe.datetime.nowdate()],
+						year_end_date: [">=", frappe.datetime.nowdate()]
+					},
+					fieldname: "name"
+				},
+				callback: function(response) {
+					if (response.message) {
+						let current_fiscal_year = response.message.name;
+						console.log("Current Fiscal Year:", current_fiscal_year);
+						
+						// Set to any field
+						cur_frm.set_value("fiscal_year", current_fiscal_year);
+					}
+				}
+			});
 		if (frm.doc.status === "Queued") frm.page.btn_secondary.hide();
 
 		if (frm.doc.docstatus === 0 && !frm.is_new()) {

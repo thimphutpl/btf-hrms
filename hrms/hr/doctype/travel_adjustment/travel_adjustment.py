@@ -164,6 +164,7 @@ class TravelAdjustment(Document):
                     "travel_from": item.travel_from,
                     "travel_to": item.travel_to,
                     "is_last_day": item.is_last_day,
+                    "country":item.country,
                 }
             ).insert(ignore_permissions=True)
 

@@ -38,10 +38,10 @@ class TravelAuthorization(Document):
 		self.set_status()
 		self.make_travel_advance()
 		self.validate_estimated_amount()
-		#validate_workflow_states(self)
+		validate_workflow_states(self)
 		if self.workflow_state != "Approved":
-			pass
-			#notify_workflow_states(self)
+			#pass
+			notify_workflow_states(self)
 
 	def validate_country(self):
 		for item in self.items:
@@ -176,7 +176,7 @@ class TravelAuthorization(Document):
 				"doctype": "Journal Entry",
 				"voucher_type": voucher_type,
 				"naming_series": naming_series,
-				"title": "Travel Advance - " + self.employee,
+				"title": "Travel Advance - " + self.employee_name + "-" + self.employee,
 				"user_remark": "Travek Advance - " + self.employee,
 				"posting_date": nowdate(),
 				"company": self.company,

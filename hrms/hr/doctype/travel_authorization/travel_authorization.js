@@ -199,7 +199,20 @@ frappe.ui.form.on("Travel Authorization Item", {
 			}
 		}
 	},
-
+	 items_add: function(frm, cdt, cdn) {
+        // When a row is added, check if travel type is Domestic
+        if (frm.doc.travel_type === 'Domestic') {
+            
+            // Get the specific new row that was just added
+            let child_row = frappe.get_doc(cdt, cdn);
+            
+            // Set the country field to Bhutan for this new row
+            child_row.country = 'Bhutan';
+            
+            // Refresh the items table to show the value on the screen
+            frm.refresh_field('items');
+        }
+    },
 	to_date: function(frm, cdt, cdn) {
 		let child = locals[cdt][cdn];
 		if (child.from_date) {
@@ -209,11 +222,11 @@ frappe.ui.form.on("Travel Authorization Item", {
 			}
 		}
 	},
-	form_render(frm, cdt, cdn) {
-        let row = locals[cdt][cdn];
-        row.country = '';
-        frm.refresh_field('items');
-    }
+	// country:function(frm, cdt, cdn) {
+    //     let row = locals[cdt][cdn];
+	// 	frappe.model.set_value(cdt, cdn, 'country',child.country);
+  
+    // }
 });
 // function calculate_advance(frm) {
 // 	frappe.call({

@@ -10,7 +10,9 @@
   "status",
   "sign_in_time",
   "sign_out_time",
-  "attendance_date"
+  "attendance_date",
+  "sign_in_remarks",
+  "sign_out_remarks"
  ],
  "fields": [
   {
@@ -50,11 +52,21 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Attendance Date"
+  },
+  {
+   "fieldname": "sign_in_remarks",
+   "fieldtype": "Text",
+   "label": "Sign In Remarks "
+  },
+  {
+   "fieldname": "sign_out_remarks",
+   "fieldtype": "Text",
+   "label": "Sign Out Remarks"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-03 00:30:53.604787",
+ "modified": "2026-07-03 22:30:58.125274",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Daily Attendance Entry",

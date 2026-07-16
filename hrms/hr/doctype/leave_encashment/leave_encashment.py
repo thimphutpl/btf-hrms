@@ -516,7 +516,7 @@ def get_permission_query_conditions(user):
 
     user_roles = frappe.get_roles(user)
     
-    if user == "Administrator" or "HR User" in user_roles:
+    if user == "Administrator" or "HR User" in user_roles or "System Manager" in user_roles:
         return
     
     # Base conditions: owner, employee link, and approver view

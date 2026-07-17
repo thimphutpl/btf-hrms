@@ -55,11 +55,16 @@
   "allow_geolocation_tracking",
   "unlink_payment_section",
   "unlink_payment_on_cancellation_of_employee_advance",
+  "seal_attachment_section",
+  "seal",
   "approver_settings_tab",
   "hr_manager",
   "hr_approver",
+  "md",
   "column_break_zguo",
   "hr_manager_name",
+  "hr_approver_name",
+  "md_name",
   "separation_clearance_approver_section",
   "afd",
   "ama",
@@ -77,11 +82,11 @@
   "enote_email_templates_section",
   "enote_approval_notification",
   "enote_copyto_notification",
+  "concept_note",
+  "concept_note_rejection",
   "column_break_bbgs",
   "enote_status_notification",
   "enote_reviewer_notification",
-  "concept_note",
-  "concept_note_rejection",
   "user_creation",
   "travel_authorization_settings_section",
   "travel_authorization_approval_notification_template",
@@ -120,7 +125,9 @@
   "attendance_tab",
   "office_gobal_ip",
   "office_local_start_ip",
-  "office_local_end_ip"
+  "office_local_end_ip",
+  "data_pais",
+  "office_gobal_ip_1"
  ],
  "fields": [
   {
@@ -777,13 +784,50 @@
    "fieldtype": "Link",
    "label": "Travel Adjustment Status Notification Template",
    "options": "Email Template"
+  },
+  {
+   "fieldname": "seal_attachment_section",
+   "fieldtype": "Section Break",
+   "label": "Seal Attachment"
+  },
+  {
+   "fieldname": "seal",
+   "fieldtype": "Attach",
+   "label": "Seal"
+  },
+  {
+   "fieldname": "md",
+   "fieldtype": "Link",
+   "label": "MD",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "hr_approver.employee_name",
+   "fieldname": "hr_approver_name",
+   "fieldtype": "Data",
+   "label": "Hr Approver Name"
+  },
+  {
+   "fetch_from": "md.employee_name",
+   "fieldname": "md_name",
+   "fieldtype": "Data",
+   "label": "MD Name"
+  },
+  {
+   "fieldname": "data_pais",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "office_gobal_ip_1",
+   "fieldtype": "Data",
+   "label": "Office Gobal Ip 1"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-01-25 12:31:45.711349",
+ "modified": "2026-07-02 11:21:36.354023",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

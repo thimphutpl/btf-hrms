@@ -11,7 +11,7 @@ import datetime
 import calendar
 
 @frappe.whitelist()
-def sign_in():
+def sign_in(remarks):
     
     employee = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "name")
     
@@ -41,7 +41,7 @@ def sign_in():
         "docstatus": 1  # Draft or Submitted
     })
 
-    
+    #hh
     holiday=get_holidays(employee, today, holiday_list=None)
     if holiday:
         frappe.throw("today's date is  already exists in holiday")
@@ -60,13 +60,15 @@ def sign_in():
     attendance.attendance_date = today
     attendance.status = "Present"  # Initial status
     attendance.sign_in_time = now_datetime()
+    attendance.sign_in_remarks=remarks
     attendance.flags.ignore_permissions = True
     attendance.insert()
     
     return {"message": "Sign-in successful", "attendance": attendance.name}
 
 @frappe.whitelist()
-def sign_out():
+def sign_out(remarks):
+    
     employee = frappe.db.get_value("Employee", {"user_id": frappe.session.user}, "name")
     #holiday=
     
@@ -96,6 +98,7 @@ def sign_out():
 
     attendance = frappe.get_doc("Daily Attendance Entry", attendance_name)
     attendance.sign_out_time = now_datetime()
+    attendance.sign_out_remarks=remarks
     #attendance.status = "Present"  # Update status to Present
     attendance.flags.ignore_permissions = True
     attendance.save()
@@ -124,9 +127,20 @@ def get_todays_attendance():
 
 @frappe.whitelist()
 def is_ip_authorized(ip_address):
-    
+    flag=0
+    emp=frappe.db.get_single_value("HR Settings", "md")
+    emp_uid=frappe.db.get_value("Employee",emp,"user_id")
+    if emp_uid==frappe.session.user:
+        flag=1
+  
+
     office_ip = frappe.db.get_single_value("HR Settings", "office_gobal_ip")
-    return  office_ip==ip_address
+    office_ip1 = frappe.db.get_single_value("HR Settings", "office_gobal_ip_1")
+    #return  (office_ip==ip_address or office_ip1==ip_address) and flag
+    if flag == 1:
+        return False
+    else:
+        return (office_ip == ip_address or office_ip1 == ip_address)
     
     # if ip_address in allowed_ips:
     #     return True

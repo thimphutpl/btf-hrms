@@ -253,7 +253,7 @@ scheduler_events = {
     "weekly": ["hrms.controllers.employee_reminders.send_reminders_in_advance_weekly"],
     "monthly": [
         "hrms.controllers.employee_reminders.send_reminders_in_advance_monthly",
-        "hrms.hr.hr_custom_function.post_earned_leaves",
+        #"hrms.hr.hr_custom_function.post_earned_leaves",
     ],
 }
 

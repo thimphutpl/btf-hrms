@@ -55,16 +55,13 @@
   "allow_geolocation_tracking",
   "unlink_payment_section",
   "unlink_payment_on_cancellation_of_employee_advance",
-  "seal_attachment_section",
-  "seal",
   "approver_settings_tab",
+  "hr_manager_name",
   "hr_manager",
   "hr_approver",
   "md",
   "column_break_zguo",
-  "hr_manager_name",
   "hr_approver_name",
-  "md_name",
   "separation_clearance_approver_section",
   "afd",
   "ama",
@@ -74,6 +71,13 @@
   "pc",
   "sws",
   "column_break_wguy",
+  "account_name",
+  "asset_management_name",
+  "hra_name",
+  "internal_audit_name",
+  "ada_name",
+  "prourement_name",
+  "sws_name",
   "overtime_settings_tab",
   "overtime_limit_type",
   "column_break_cqkd",
@@ -82,11 +86,11 @@
   "enote_email_templates_section",
   "enote_approval_notification",
   "enote_copyto_notification",
-  "concept_note",
-  "concept_note_rejection",
   "column_break_bbgs",
   "enote_status_notification",
   "enote_reviewer_notification",
+  "concept_note",
+  "concept_note_rejection",
   "user_creation",
   "travel_authorization_settings_section",
   "travel_authorization_approval_notification_template",
@@ -126,7 +130,6 @@
   "office_gobal_ip",
   "office_local_start_ip",
   "office_local_end_ip",
-  "data_pais",
   "office_gobal_ip_1"
  ],
  "fields": [
@@ -786,36 +789,66 @@
    "options": "Email Template"
   },
   {
-   "fieldname": "seal_attachment_section",
-   "fieldtype": "Section Break",
-   "label": "Seal Attachment"
+   "fetch_from": "hr_approver.employee_name",
+   "fieldname": "hr_approver_name",
+   "fieldtype": "Data",
+   "label": "Hr Approver Name",
+   "read_only": 1
   },
   {
-   "fieldname": "seal",
-   "fieldtype": "Attach",
-   "label": "Seal"
+   "fetch_from": "afd.employee_name",
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ama.employee_name",
+   "fieldname": "asset_management_name",
+   "fieldtype": "Data",
+   "label": "Asset Management Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "icthr.employee_name",
+   "fieldname": "hra_name",
+   "fieldtype": "Data",
+   "label": "HRA Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "iad.employee_name",
+   "fieldname": "internal_audit_name",
+   "fieldtype": "Data",
+   "label": "Internal Audit Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ada.employee_name",
+   "fieldname": "ada_name",
+   "fieldtype": "Data",
+   "label": "ADA Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "pc.employee_name",
+   "fieldname": "prourement_name",
+   "fieldtype": "Data",
+   "label": "Prourement Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "sws.employee_name",
+   "fieldname": "sws_name",
+   "fieldtype": "Data",
+   "label": "SWS Name",
+   "read_only": 1
   },
   {
    "fieldname": "md",
    "fieldtype": "Link",
    "label": "MD",
    "options": "Employee"
-  },
-  {
-   "fetch_from": "hr_approver.employee_name",
-   "fieldname": "hr_approver_name",
-   "fieldtype": "Data",
-   "label": "Hr Approver Name"
-  },
-  {
-   "fetch_from": "md.employee_name",
-   "fieldname": "md_name",
-   "fieldtype": "Data",
-   "label": "MD Name"
-  },
-  {
-   "fieldname": "data_pais",
-   "fieldtype": "Data"
   },
   {
    "fieldname": "office_gobal_ip_1",
@@ -827,7 +860,7 @@
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-07-02 11:21:36.354023",
+ "modified": "2026-07-17 16:17:28.843943",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

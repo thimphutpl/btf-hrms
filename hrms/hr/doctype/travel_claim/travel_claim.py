@@ -188,6 +188,7 @@ class TravelClaim(Document):
                 "party_check": 1,
                 "party_type": "Employee",
                 "party": self.employee,
+                "name1":self.employee_name,
                 "is_advance": "Yes",
                 "reference_type": "Travel Claim",
                 "reference_name": self.name,
@@ -204,6 +205,7 @@ class TravelClaim(Document):
                     "party_check": 1,
                     "party_type": "Employee",
                     "party": self.employee,
+                    "name1":self.employee_name
                 }
             )
 

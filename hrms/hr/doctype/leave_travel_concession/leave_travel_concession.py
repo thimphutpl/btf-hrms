@@ -8,56 +8,24 @@ from datetime import datetime
 import calendar
 from dateutil.relativedelta import relativedelta
 from hrms.hr.hr_custom_function import get_salary_tax
-        
-class LeaveTravelConcession(Document):
 
+
+class LeaveTravelConcession(Document):
     def validate(self):
         self.validate_employee()
         self.validate_duplicate()
         self.calculate_values()
-        #self.set_approver()
-        if self.workflow_state in ('Waiting Approval','Approved'):
-           self.send_email_to_approver()
-    
-    def send_email_to_approver(self):
-        
-        parent_doc = frappe.get_doc(self.doctype, self.name)
-        args = parent_doc.as_dict()
-        #frappe.throw(str(self.workflow_state))
-        if self.workflow_state=='Waiting Approval':
-            args["workflow_state"] = self.workflow_state
-            template = frappe.db.get_single_value(
-                        "HR Settings", "leave_travel_concession_status_notification"
-                    )
-            approver=self.approver
-        if self.workflow_state=='Approved':
-            args["workflow_state"] = self.workflow_state
-            template = frappe.db.get_single_value(
-                        "HR Settings", "leave_travel_concession_approval_notification"
-                    )
-            approver=self.owner
-        if not template:
-            frappe.msgprint(
-                _(
-                    "Please set default template for Leave Travel  in HR Settings."
-                )
-            )
-            return
-
-        email_template = frappe.get_doc("Email Template", template)
-        message = frappe.render_template(email_template.response, args)
-        subject = email_template.subject
-        frappe.sendmail(
-            recipients=approver,
-            subject=subject,
-            message=message
-            
-        )
-    
 
     def on_submit(self):
 
-        
+        # for a in self.items:
+
+        # 	employee=a.employee
+        # 	tax=a.tax
+        # 	basic_pay=a.basic_pay
+        # 	net_amt=a.amount
+
+        # self.post_journal_entry(employee,tax,basic_pay,net_amt)
         employee_data = []
         for a in self.items:
             employee_data.append(
@@ -70,13 +38,8 @@ class LeaveTravelConcession(Document):
             )
 
         # Process all data at once
-        #notify_workflow_states(self)
         self.post_journal_entry(employee_data)
-    def set_approver(self):
-        emp=frappe.db.get_single_value("HR Settings","md")
-        usr=frappe.db.get_value("Employee",emp,"user_id")
-        
-        self.approver=usr
+
     def validate_employee(self):
         if self.employee:
             employment_type = frappe.db.get_value(
@@ -122,9 +85,18 @@ class LeaveTravelConcession(Document):
     def calculate_values(self):
         if self.items:
             total = 0
+            total_tax = 0
+            total_net = 0
+
             for a in self.items:
                 total += flt(a.basic_pay) - flt(a.tax)
+                total_tax+= flt(a.tax)
+                total_net += flt(a.amount)
             self.total_amount = total
+            self.total_tax = total_tax
+            self.net_total = total_net
+
+
         else:
             frappe.throw("Cannot save without any employee records")
 
@@ -187,7 +159,7 @@ class LeaveTravelConcession(Document):
             posting.setdefault("to_payables", []).append(
                 {
                     "account": ltc_expense_account,
-                    "debit_in_account_currency": basic_pay,
+                    "debit_in_account_currency": tax + net_amt,
                     "party_check": 0,
                     "reference_type": self.doctype,
                     "reference_name": self.name,
@@ -239,6 +211,7 @@ class LeaveTravelConcession(Document):
                     "reference_name": self.name,
                 }
             )
+        # frappe.throw(str(posting))
 
         # Create journal entries
         jv_name, v_title = None, ""
@@ -271,120 +244,9 @@ class LeaveTravelConcession(Document):
             if i == "to_payables":
                 doc.submit()
 
-        # Payables
-        # posting.setdefault("to_payables", []).append({
-        # 	"account" 					: ltc_expense_account,
-        # 	"debit_in_account_currency"	: basic_pay,
-        # 	# "cost_center"    			: self.cost_center,
-        # 	"party_check"			 	: 0,
-        # 	"reference_type"			: self.doctype,
-        # 	"reference_name"			: self.name,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # })
-        # if flt(tax) > 0:
-        # 	posting.setdefault("to_payables", []).append({
-        # 		"account" 					: tax_account,
-        # 		"credit_in_account_currency": flt(tax),
-        # 		# "cost_center"    			: self.cost_center,
-        # 		"party_check"				: 0,
-        # 		"reference_type"			: self.doctype,
-        # 		"reference_name"			: self.name,
-        # 	})
-        # posting.setdefault("to_payables", []).append({
-        # 	"account" 						: ltc_payable_account,
-        # 	"credit_in_account_currency"	: net_amt,
-        # 	# "cost_center"    				: self.cost_center,
-        # 	"party_check"					: 1,
-        # 	"party_type"					: "Employee",
-        # 	"party"							: employee,
-        # 	"reference_type"				: self.doctype,
-        # 	"reference_name"				: self.name,
-        # })
-
-        # # To Bank
-        # posting.setdefault("to_bank", []).append({
-        # 	"account"       				: ltc_payable_account,
-        # 	"debit_in_account_currency"		: net_amt,
-        # 	# "cost_center"   				: self.cost_center,
-        # 	"party_check"					: 1,
-        # 	"party_type"					: "Employee",
-        # 	"party"							: employee,
-        # 	"reference_type"				: self.doctype,
-        # 	"reference_name"				: self.name,
-        # })
-        # posting.setdefault("to_bank", []).append({
-        # 	"account"       				: default_bank_account,
-        # 	"credit_in_account_currency"	: net_amt,
-        # 	# "cost_center"   				: self.cost_center,
-        # 	"party_check"   				: 0,
-        # 	"reference_type"				: self.doctype,
-        # 	"reference_name"				: self.name,
-        # })
-
-        # jv_name, v_title = None, ""
-        # for i in posting:
-        # 	if i == "to_payables":
-        # 		title         = "To Payables"
-        # 		voucher_type  = "Journal Entry"
-        # 		naming_series = "Journal Voucher"
-        # 	else:
-        # 		title         = "To Bank"
-        # 		voucher_type  = "Bank Entry"
-        # 		naming_series = "Bank Payment Voucher"
-
-        # 	doc = frappe.get_doc({
-        # 			"doctype"			: "Journal Entry",
-        # 			"voucher_type"		: voucher_type,
-        # 			"naming_series"		: naming_series,
-        # 			"title"				: title,
-        # 			"remark"			: title,
-        # 			"posting_date"		: nowdate(),
-        # 			"company"			: self.company,
-        # 			"accounts"			: posting[i],
-        # 			"branch"			: self.branch,
-        # 		})
-
-        # 	doc.flags.ignore_permissions = 1
-        # 	doc.insert()
-        # 	if i == "to_payables":
-        # 		doc.submit()
-        # 	else:
-        # 		pass
-        # self.db_set("journal_entry", doc.name)
-        # self.db_set("journal_entry_status", "Forwarded to accounts for processing payment on ")
+      
 
     def on_cancel(self):
-        notify_workflow_states(self)
 
         jv_doc = frappe.get_doc("Journal Entry", self.journal_entry)
         # jv = frappe.db.get_value("Journal Entry", self.journal_entry, "docstatus")
@@ -415,21 +277,6 @@ class LeaveTravelConcession(Document):
                 return
 
             emp_list = ", ".join([frappe.db.escape(a.employee) for a in self.items])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             query = f"""
 			SELECT 

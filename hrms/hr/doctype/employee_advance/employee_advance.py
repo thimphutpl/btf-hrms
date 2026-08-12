@@ -57,9 +57,9 @@ class EmployeeAdvance(Document):
 		self.validate_dates()
 		self.calculate_amount()
 		self.set_max_amount()
-		validate_workflow_states(self)
-		if self.workflow_state not in ("Approved","Cancelled","Draft"):
-			notify_workflow_states(self)
+		# validate_workflow_states(self)
+		# if self.workflow_state not in ("Approved","Cancelled","Draft"):
+		# 	notify_workflow_states(self)
 
 
 	def set_max_amount(self):
@@ -75,7 +75,7 @@ class EmployeeAdvance(Document):
 			self.advance_account = frappe.db.get_value("Company", self.company, "default_interest_free_loan_account")
 			self.max_amount=max_amount_intrs_fre_ln * self.gross_pay
 	def on_submit(self):
-		notify_workflow_states(self)
+		#notify_workflow_states(self)
 		self.post_journal_entry()
 		
 
@@ -200,6 +200,9 @@ class EmployeeAdvance(Document):
 				)
 	
 	def post_journal_entry(self):
+		#frappe.throw(str(self.advance_type))
+		
+
 		advance_account=self.advance_account
 		#advance_account = frappe.db.get_value("Company", self.company, "default_employee_advance_account")
 		bank_account = frappe.db.get_value("Branch", self.branch, "expense_bank_account")
@@ -211,7 +214,9 @@ class EmployeeAdvance(Document):
 				),
 				title="Missing Advance Account"
 			)
-
+		if self.advance_type=='Interest Free loan':
+			advance_account = frappe.db.get_value("Company", self.company, "default_interest_free_loan_account")
+			
 		if not bank_account:
 			frappe.throw(
 				"Default Expense Bank Account is not set for {}. Please configure it in the Branch.".format(

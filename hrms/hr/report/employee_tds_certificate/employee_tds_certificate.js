@@ -1,14 +1,22 @@
-// Copyright (c) 2025, Frappe Technologies Pvt. Ltd. and contributors
+// Copyright (c) 2026, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
 frappe.query_reports["Employee TDS Certificate"] = {
 	"filters": [
 		{
+			"fieldname":"company",
+			"label": __("Company"),
+			"fieldtype": "Link",
+			"options": "Company",
+			"default": frappe.defaults.get_user_default("company"),
+			"reqd": 1,
+		},
+		{
 			"fieldname":"fiscal_year",
 			"label": __("Fiscal Year"),
 			"fieldtype": "Link",
 			"options": "Fiscal Year",
-			"default": frappe.defaults.get_user_default("fiscal_year"),
+			"reqd": 1,
 		},
 		{
 			"fieldname":"employee",
@@ -24,21 +32,21 @@ frappe.query_reports["Employee TDS Certificate"] = {
 				frappe.model.with_doc("Employee", emp, function(r) {
 					var fy = frappe.model.get_doc("Employee", emp);
 					frappe.query_report.set_filter_value("e_name", fy.employee_name);
-					frappe.query_report.set_filter_value("cid", fy.passport_number);
+					frappe.query_report.set_filter_value("cid", fy.cid_no);
 					frappe.query_report.set_filter_value("tpn", fy.tpn_number);
 					frappe.query_report.refresh();
 				});
-				frappe.call({
-					method: "frappe.client.get_single_value",
-					args: {
-						doctype: "HR Settings", 
-						field:"seal",
-					},
-					callback: function(r) {
-						console.log(r.message);
-						frappe.query_report.set_filter_value("seal", r.message);
-						frappe.query_report.refresh();
-					}
+
+				var com = query_report.get_values().company;
+				if (!com) {
+					return;
+				}
+				frappe.model.with_doc("Company", com, function(r) {
+					var c = frappe.model.get_doc("Company", com);
+					frappe.query_report.set_filter_value("seal", c.seal);
+					frappe.query_report.set_filter_value("signature", c.signature);
+					frappe.query_report.set_filter_value("authorizer_name", c.authorizer_name);
+					frappe.query_report.refresh();
 				});
 			}
 		},
@@ -60,44 +68,27 @@ frappe.query_reports["Employee TDS Certificate"] = {
 			"label": __("TPN"),
 			"read_only": 1
 		},
+		
 		{
-			"fieldname":"approver",
-			"label":"Approver",
-			"fieldtype": "Link",
-			"options": "Employee",
-			"on_change": function(query_report) {
-				var emp = query_report.get_values().approver;
-				if (!emp) {
-					return;
-				}
-				frappe.model.with_doc("Employee", emp, function(r) {
-					var fy = frappe.model.get_doc("Employee", emp);
-					frappe.query_report.set_filter_value("approver_name", fy.employee_name);
-					frappe.query_report.set_filter_value("approver_designation", fy.designation);
-					frappe.query_report.refresh();
-				});
-			}
-		},
-		{
-			"fieldname":"approver_name",
-			"label":"Approver Name",
-			"fieldtype": "Data",
-			"read_only": 1
-
-		},
-		{
-			"fieldname":"approver_designation",
-			"label":"Approver Designation",
-			"fieldtype": "Data",
-			"read_only": 1
-		},
-		{
-			"fieldname":"seal",
-			"label":"Seal and Signature",
+			"fieldname":"signature",
+			"label":"Signature",
 			"fieldtype": "Data",
 			"read_only": 1,
 			"hidden": 1
-		}
+		},
+		{
+			"fieldname":"seal",
+			"label":"Seal",
+			"fieldtype": "Data",
+			"read_only": 1,
+			"hidden": 1
+		},
+		{
+			"fieldname":"authorizer_name",
+			"label":"Authorizer Name",
+			"fieldtype": "Data",
+			"read_only": 1,
+			"hidden": 1
+		},
 	]
 }
-

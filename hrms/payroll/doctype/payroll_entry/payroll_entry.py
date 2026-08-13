@@ -59,6 +59,7 @@ class PayrollEntry(Document):
 
 	def before_submit(self):
 		self.validate_existing_salary_slips()
+		#self.validate_salary_structures_for_employees() 
 		if self.get_employees_with_unmarked_attendance():
 			frappe.throw(_("Cannot submit. Attendance is not marked for some employees."))
 
@@ -66,6 +67,23 @@ class PayrollEntry(Document):
 		self.set_status(update=True, status="Submitted")
 		
 		self.create_salary_slips()
+
+	def validate_salary_structures_for_employees(self):
+		employees = [emp.employee for emp in self.employees]
+		without_struct = frappe.db.sql("""
+			SELECT emp.employee_name 
+			FROM `tabEmployee` emp
+			WHERE emp.name IN %(employees)s
+			AND NOT EXISTS (
+				SELECT 1 FROM `tabSalary Structure Assignment` ssa
+				WHERE ssa.employee = emp.name 
+				AND ssa.docstatus = 1
+			)
+		""", {"employees": employees}, as_dict=1)
+		
+		if without_struct:
+			names = ", ".join([e.employee_name for e in without_struct])
+			frappe.throw(_("Salary Structure not assigned for: {0}").format(names))
 
 	def validate_existing_salary_slips(self):
 		if not self.employees:
@@ -135,17 +153,39 @@ class PayrollEntry(Document):
 				frappe.get_doc("Salary Slip", salary_slip.name).cancel()
 			frappe.delete_doc("Salary Slip", salary_slip.name)
 
+	# def cancel_linked_journal_entries(self):
+	# 	journal_entries = frappe.get_all(
+	# 		"Journal Entry Account",
+	# 		{"reference_type": self.doctype, "reference_name": self.name, "docstatus": 0},
+	# 		pluck="parent",
+	# 		distinct=True,
+	# 	)
+
+	# 	# cancel Journal Entries
+	# 	for je in journal_entries:
+	# 		frappe.get_doc("Journal Entry", je).cancel()
 	def cancel_linked_journal_entries(self):
 		journal_entries = frappe.get_all(
 			"Journal Entry Account",
-			{"reference_type": self.doctype, "reference_name": self.name, "docstatus": 1},
+			{
+				"reference_type": self.doctype,
+				"reference_name": self.name,
+			},
 			pluck="parent",
 			distinct=True,
 		)
 
-		# cancel Journal Entries
 		for je in journal_entries:
-			frappe.get_doc("Journal Entry", je).cancel()
+			doc = frappe.get_doc("Journal Entry", je)
+
+			if doc.docstatus == 1:
+				frappe.throw(
+			f"Journal Entry {doc.name} is submitted. Please cancel it first."
+		)
+				# doc.cancel()
+
+			elif doc.docstatus == 0:
+				frappe.delete_doc("Journal Entry", je, force=True)
 
 	def get_linked_salary_slips(self):
 		return frappe.get_all("Salary Slip", {"payroll_entry": self.name}, ["name", "docstatus"])
@@ -675,14 +715,14 @@ class PayrollEntry(Document):
 		if employee_wise_accounting_enabled:
 			"""
 			employee_based_payroll_payable_entries = {
-			                'HREMP00004': {
-			                                'earnings': 83332.0,
-			                                'deductions': 2000.0
-			                },
-			                'HREMP00005': {
-			                                'earnings': 50000.0,
-			                                'deductions': 2000.0
-			                }
+							'HREMP00004': {
+											'earnings': 83332.0,
+											'deductions': 2000.0
+							},
+							'HREMP00005': {
+											'earnings': 50000.0,
+											'deductions': 2000.0
+							}
 			}
 			"""
 			for employee, employee_details in self.employee_based_payroll_payable_entries.items():
@@ -1282,13 +1322,13 @@ class PayrollEntry(Document):
 	def get_employee_and_attendance_details(self) -> list[dict]:
 		"""Returns a list of employee and attendance details like
 		[
-		        {
-		                "name": "HREMP00001",
-		                "date_of_joining": "2019-01-01",
-		                "relieving_date": "2022-01-01",
-		                "holiday_list": "Holiday List Company",
-		                "attendance_count": 22
-		        }
+				{
+						"name": "HREMP00001",
+						"date_of_joining": "2019-01-01",
+						"relieving_date": "2022-01-01",
+						"holiday_list": "Holiday List Company",
+						"attendance_count": 22
+				}
 		]
 		"""
 		employees = [emp.employee for emp in self.employees]
@@ -1454,14 +1494,36 @@ def remove_payrolled_employees(emp_list, fiscal_year, month):
 
 @frappe.whitelist()
 def get_start_end_dates(fiscal_year, month, company=None):
-	"""Returns dict of start and end dates for given month and fisacl year"""
-
+	"""Returns dict of start and end dates for given month and fiscal year"""
+	
 	months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	month = str(int(months.index(month))+1).rjust(2, "0")
-
-	start_date = "-".join([str(fiscal_year), month, "01"])
-	end_date   = get_last_day(start_date)
-
+	
+	# Extract the starting year from fiscal year (e.g., "26-27" -> "26" or "2026-27" -> "2026")
+	fiscal_year_str = str(fiscal_year)
+	if '-' in fiscal_year_str:
+		# Check if it's a 2-digit or 4-digit year format
+		parts = fiscal_year_str.split('-')
+		year = parts[0]  # Take the first part as the start year
+		
+		# If the year is 2 digits, convert to 4 digits (e.g., "26" -> "2026")
+		if len(year) == 2:
+			# Assuming 21st century
+			year = "20" + year
+	else:
+		year = fiscal_year_str
+	
+	# Construct the date with the proper 4-digit year
+	start_date = "-".join([year, month, "01"])
+	
+	# Validate the date
+	try:
+		frappe.utils.getdate(start_date)  # This will raise an error if invalid
+	except Exception:
+		frappe.throw(_("Invalid date format. Fiscal Year: {0}, Month: {1}").format(fiscal_year, month))
+	
+	end_date = get_last_day(start_date)
+	
 	return frappe._dict({"start_date": start_date, "end_date": end_date})
 
 
@@ -2411,14 +2473,14 @@ class PayrollEntry(Document):
 		if employee_wise_accounting_enabled:
 			"""
 			employee_based_payroll_payable_entries = {
-			                'HREMP00004': {
-			                                'earnings': 83332.0,
-			                                'deductions': 2000.0
-			                },
-			                'HREMP00005': {
-			                                'earnings': 50000.0,
-			                                'deductions': 2000.0
-			                }
+							'HREMP00004': {
+											'earnings': 83332.0,
+											'deductions': 2000.0
+							},
+							'HREMP00005': {
+											'earnings': 50000.0,
+											'deductions': 2000.0
+							}
 			}
 			"""
 			for employee, employee_details in self.employee_based_payroll_payable_entries.items():
@@ -2835,13 +2897,13 @@ class PayrollEntry(Document):
 	def get_employee_and_attendance_details(self) -> list[dict]:
 		"""Returns a list of employee and attendance details like
 		[
-		        {
-		                "name": "HREMP00001",
-		                "date_of_joining": "2019-01-01",
-		                "relieving_date": "2022-01-01",
-		                "holiday_list": "Holiday List Company",
-		                "attendance_count": 22
-		        }
+				{
+						"name": "HREMP00001",
+						"date_of_joining": "2019-01-01",
+						"relieving_date": "2022-01-01",
+						"holiday_list": "Holiday List Company",
+						"attendance_count": 22
+				}
 		]
 		"""
 		employees = [emp.employee for emp in self.employees]

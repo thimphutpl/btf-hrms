@@ -118,7 +118,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "DSA (%)",
-   "options": "100\n70\n50\n20\n0",
+   "options": "100\n80\n85\n75\n70\n62.5\n50\n35\n20\n0",
    "reqd": 1
   },
   {
